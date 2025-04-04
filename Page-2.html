@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
+    <meta charset="utf-8" />
+
+    <style>
+      /* Remove any styles from the main tag */
+      main {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      /* Add a bit of styling for clickable areas */
+      .clickable-area {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+      }
+
+      .left-area {
+        left: 0;
+        background-color: rgba(255, 0, 0, 0.2); /* Just for visualization */
+      }
+
+      .right-area {
+        right: 0;
+        background-color: rgba(0, 0, 255, 0.2); /* Just for visualization */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay"></div>
+
+    <!-- p5.js sketch area -->
+    <main></main>
+
+    <script>
+      let angle1 = 0;
+      let img1, img2;
+      let angle2 = Math.PI / 4; // start of the second triangle at a different rotation
+      let triangleSize = 8;
+      let roadAngle = 3.14159 / 10;
+
+      let treeX = 0, treeY = 100, treeWidth, treeHeight;
+      let rocksX = width / 2, rocksY = 100, rocksWidth, rocksHeight;
+      let triangleX, triangleY;
+
+      function preload() {
+        img1 = loadImage("Tree.jpg");  // Replace with your correct image path
+        img2 = loadImage("Rocks.jpg"); // Replace with your correct image path
+      }
+
+      function setup() {
+        createCanvas(400, 400);
+        rectMode(CENTER);
+
+        // Calculate image dimensions
+        treeWidth = width / 2;
+        treeHeight = height / 2;
+        rocksWidth = width / 2;
+        rocksHeight = height / 2;
+        
+        // Positioning for triangles in the sky
+        triangleX = width / 2;
+        triangleY = height / 5;
+      }
+
+      function draw() {
+        background(0);
+
+        // Display images on the canvas
+        image(img1, treeX, treeY, treeWidth, treeHeight); // Tree image on the left
+        image(img2, rocksX, rocksY, rocksWidth, rocksHeight); // Rocks image on the right
+        
+        // Centerpoint for the road
+        let centerX = width / 2;
+        let centerY = height / 2;
+
+        // Main road using two lines
+        stroke(255, 150); // Subtle white stroke
+        strokeWeight(3); // Thin road lines
+        let vanishingPointX = width / 2;
+        let vanishingPointY = height / 2; // This is where the road converges
+
+        let roadLineOffset = 30;
+
+        // Left edge of the road
+        line(centerX - roadLineOffset, centerY, 0, height); // Left line
+
+        // Right edge of the road
+        line(centerX + roadLineOffset, centerY, width, height); // Right line
+
+        // Smaller yellow rectangles
+        fill(255, 255, 0);
+        // First yellow rectangle
+        rect(centerX, height * 0.7, width * 0.015, height / 30);
+        rect(centerX, height * 0.85, width * 0.015, height / 30);
+
+        noStroke();
+        fill(255, 255, 0);
+        let lineSpacing = 25; // Space between the center lines
+        for (let i = 0; i < height; i += lineSpacing) {
+          let x = map(i, 0, height, centerX - roadLineOffset, centerX + roadLineOffset);
+          line(x, i - 50, x, i + 50);
+        }
+
+        // Spinning triangles (shooting star)
+        push();
+        translate(triangleX, triangleY); // Positioning the first triangle
+        rotate(angle1); // Apply rotation to make it spin
+        fill(255, 255, 0);
+        noStroke();
+        triangle(-triangleSize, triangleSize, 0, -triangleSize * 1.5, triangleSize, triangleSize);
+        pop();
+
+        triangleX += 5; // Increase the horizontal speed
+
+        // Reset for the star
+        if (triangleX > width + 50) {
+          triangleX = -50; // Reset to the left side
+        }
+
+        // Controls for the rotation of the star
+        angle1 += 0.08; // Faster spinning for the first triangle
+        angle2 += 0.1; // Faster spinning for the second triangle
+      }
+
+      // Mouse-click function to handle redirection
+      function mousePressed() {
+        // Check if the mouse click is within the bounds of the Tree image
+        if (mouseX > treeX && mouseX < treeX + treeWidth && mouseY > treeY && mouseY < treeY + treeHeight) {
+          // Redirect to the tree page
+          window.location.href = "Tree-Menu-Page5.html"; // Update with the correct URL
+        }
+        
+        // Check if the mouse click is within the bounds of the Rocks image
+        if (mouseX > rocksX && mouseX < rocksX + rocksWidth && mouseY > rocksY && mouseY < rocksY + rocksHeight) {
+          // Redirect to the rocks page
+          window.location.href = "Rocks-Index-page4.html"; // Update with the correct URL
+        }
+      }
+    </script>
+  </body>
+</html>
